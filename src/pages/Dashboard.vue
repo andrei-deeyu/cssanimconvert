@@ -11,7 +11,8 @@
     </div>
     <div id="JSONContainer">
       <JSONStructure
-        :extractedAnimations="extractedAnimations">
+        :extractedAnimations="extractedAnimations"
+        :SVGFilename="svgFilename">
       </JSONStructure>
     </div>
   </div>

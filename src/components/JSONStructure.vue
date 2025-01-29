@@ -3,12 +3,14 @@
     <div id="jsonStructure">
       <pre>{{ extractedAnimations }}</pre>
     </div>
-    <div id="actions" class="d-flex flex-row justify-content-between">
-      <button class="btn btn-secondary">
-        <span class="bi bi-download me-2"></span>
-        Download JSON
-      </button>
-      <button >Upload JSON</button>
+    <div id="actions" class="d-flex flex-row justify-content-between gap-3">
+      <ButtonDownloadJSON
+        :extractedAnimations="extractedAnimations"
+        :SVGFilename="SVGFilename">
+      </ButtonDownloadJSON>
+      <ButtonUploadJSON>
+
+      </ButtonUploadJSON>
     </div>
   </div>
 </template>
@@ -17,8 +19,11 @@ import { defineProps } from 'vue';
 
 const props = defineProps<{
   extractedAnimations: any[];
+  SVGFilename: string | null;
 }>();
 
+import ButtonDownloadJSON from './buttons/ButtonDownloadJSON.vue';
+import ButtonUploadJSON from './buttons/ButtonUploadJSON.vue';
 </script>
 <style scoped>
 #structure {

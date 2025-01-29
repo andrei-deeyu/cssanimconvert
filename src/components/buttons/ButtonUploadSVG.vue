@@ -16,7 +16,7 @@ const handleFileUpload = (event: Event) => {
     reader.onload = () => {
       emit('file-uploaded', {
         content: reader.result as string,
-        name: file.name
+        name: file.name.split('.')[0]
       });
     };
 
