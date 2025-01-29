@@ -14,7 +14,10 @@ const handleFileUpload = (event: Event) => {
   if (file && file.type === 'image/svg+xml') {
     const reader = new FileReader();
     reader.onload = () => {
-      emit('file-uploaded', reader.result as string); // Emit the SVG content
+      emit('file-uploaded', {
+        content: reader.result as string,
+        name: file.name
+      });
     };
 
     reader.readAsText(file);

@@ -22,6 +22,7 @@ import ButtonUploadSVG from '../components/buttons/ButtonUploadSVG.vue';
 import JSONStructure from '../components/JSONStructure.vue';
 
 const svgContent = ref<string | null>(null);
+const svgFilename = ref<string | null>(null);
 const extractedAnimations = ref<any[]>([]);
 
 const extractAnimations = (svgString: string) => {
@@ -44,9 +45,11 @@ const extractAnimations = (svgString: string) => {
 };
 
 // Function triggered when file is uploaded in child component
-const handleSVGUploaded = (svg: string) => {
-  svgContent.value = svg;
-  extractAnimations(svg);
+const handleSVGUploaded = (svg: { content: string, name: string }) => {
+  svgContent.value = svg.content;
+  svgFilename.value = svg.name;
+
+  extractAnimations(svg.content);
 };
 </script>
 <style scoped>
