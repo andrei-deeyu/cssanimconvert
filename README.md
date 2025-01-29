@@ -1,39 +1,27 @@
-# cssanimconvert
+# SVG Animation Parser & Editor
 
-This template should help get you started developing with Vue 3 in Vite.
+## Overview
+This is a front-end web application that allows users to extract, edit, and reapply animations from SVG files using JSON.
 
-## Recommended IDE Setup
+## Features
+✅ **Upload an SVG** – Users can upload an SVG file with CSS animations.
+✅ **Extract & Parse Animations** – The app identifies all CSS animations and converts them into a structured JSON format.
+✅ **Display SVG & JSON** – Both the animated SVG and its corresponding JSON representation are shown side by side.
+✅ **Download JSON** – Users can download the extracted JSON without requiring a backend.
+✅ **Upload JSON** – A previously exported JSON file can be uploaded to modify animations.
+✅ **Apply JSON to SVG** – If the uploaded SVG matches the structure of the exported one, animations are reapplied.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
+## Run in development
+### Installation
+  ```sh
+    git clone https://github.com/your-username/svg-animation-parser.git
+    cd svg-animation-parser
+  ```
+### Project Setup
+  ```sh
+  npm install
+  ```
 ### Compile and Hot-Reload for Development
-
 ```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
