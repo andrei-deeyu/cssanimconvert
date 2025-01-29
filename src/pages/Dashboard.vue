@@ -14,6 +14,15 @@
         :extractedAnimations="extractedAnimations"
         :SVGFilename="svgFilename">
       </JSONStructure>
+      <div id="actions" class="d-flex flex-row justify-content-between gap-3">
+      <ButtonDownloadJSON
+        :extractedAnimations="extractedAnimations"
+        :SVGFilename="svgFilename">
+      </ButtonDownloadJSON>
+      <ButtonUploadJSON>
+
+      </ButtonUploadJSON>
+    </div>
     </div>
   </div>
 </template>
@@ -21,6 +30,8 @@
 import { ref } from 'vue';
 import ButtonUploadSVG from '../components/buttons/ButtonUploadSVG.vue';
 import JSONStructure from '../components/JSONStructure.vue';
+import ButtonDownloadJSON from '../components/buttons/ButtonDownloadJSON.vue'
+import ButtonUploadJSON from '../components/buttons/ButtonUploadJSON.vue';
 
 const svgContent = ref<string | null>(null);
 const svgFilename = ref<string | null>(null);
