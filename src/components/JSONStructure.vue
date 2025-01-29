@@ -1,18 +1,23 @@
 <template>
   <div id="structure" class="container bg-light border border-3 border-secondary rounded-start d-flex flex-column justify-content-between">
     <div id="jsonStructure">
-      <!-- <pre>{{ extractedAnimations }}</pre> -->
+      <pre>{{ extractedAnimations }}</pre>
     </div>
     <div id="actions" class="d-flex flex-row justify-content-between">
-      <button class="btn btn-secondary"><!-- @click="downloadJson"> -->
+      <button class="btn btn-secondary">
         <span class="bi bi-download me-2"></span>
         Download JSON
       </button>
-      <button>Upload JSON</button> <!--@click="downloadJson"-->
+      <button >Upload JSON</button>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { defineProps } from 'vue';
+
+const props = defineProps<{
+  extractedAnimations: any[];
+}>();
 
 </script>
 <style scoped>
