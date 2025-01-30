@@ -96,11 +96,9 @@ const applyAnimationsFromJSON = () => {
     svgDoc.documentElement.appendChild(styleTag);
   }
 
-  let newStyles = '';
-  animationData.value.forEach(({ name, keyframes }) => {
-    const cleanedKeyframes = keyframes.map((kf: any) => kf.replace(/\n/g, '').trim()).join(' ');
-    newStyles += `@keyframes ${name} { ${cleanedKeyframes} }\n`;
-  });
+  const newStyles = animationData.value.map(({ name, keyframes }) =>
+    `@keyframes ${name} { ${keyframes.join(' ')} }`
+  ).join('\n');
 
   styleTag.textContent += newStyles; // Append styles instead of replacing
   svgContent.value = new XMLSerializer().serializeToString(svgDoc);
