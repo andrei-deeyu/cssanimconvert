@@ -19,15 +19,15 @@
         :extractedAnimations="extractedAnimations"
         :SVGFilename="svgFilename">
       </ButtonDownloadJSON>
-      <ButtonUploadJSON>
-
+      <ButtonUploadJSON
+        @file-uploaded="handleJSONUploaded">
       </ButtonUploadJSON>
     </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ButtonUploadSVG from '../components/buttons/ButtonUploadSVG.vue';
 import JSONStructure from '../components/JSONStructure.vue';
 import ButtonDownloadJSON from '../components/buttons/ButtonDownloadJSON.vue'
@@ -37,7 +37,24 @@ const svgContent = ref<string | null>(null);
 const svgFilename = ref<string | null>(null);
 const extractedAnimations = ref<any[]>([]);
 
-const extractAnimations = (svgString: string) => {
+const animationData = ref<any[]>([]); // Store JSON animations
+
+// Function triggered when file is uploaded in child component
+const handleSVGUploaded = (svg: { content: string, name: string }) => {
+  svgContent.value = svg.content;
+  svgFilename.value = svg.name;
+
+  extractAnimationsFromSVG(svg.content);
+  // applyAnimationsFromJSON();  -- ?
+};
+
+const handleJSONUploaded = (json: { content: any, name: string }) => {
+  animationData.value = json.content;
+
+  applyAnimationsFromJSON();
+};
+
+const extractAnimationsFromSVG = (svgString: string) => {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
   const styleTags = svgDoc.querySelectorAll('style');
@@ -56,13 +73,30 @@ const extractAnimations = (svgString: string) => {
   });
 };
 
-// Function triggered when file is uploaded in child component
-const handleSVGUploaded = (svg: { content: string, name: string }) => {
-  svgContent.value = svg.content;
-  svgFilename.value = svg.name;
+const applyAnimationsFromJSON = () => {
+  if (!svgContent.value || animationData.value.length === 0) return;
 
-  extractAnimations(svg.content);
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(svgContent.value, 'image/svg+xml');
+  let styleTag = svgDoc.querySelector('style');
+
+  if (!styleTag) {
+    styleTag = document.createElement('style');
+    svgDoc.documentElement.appendChild(styleTag);
+  }
+
+  let newStyles = '';
+  animationData.value.forEach(({ name, keyframes }) => {
+    const cleanedKeyframes = keyframes.map((kf: any) => kf.replace(/\n/g, '').trim()).join(' ');
+    newStyles += `@keyframes ${name} { ${cleanedKeyframes} }\n`;
+  });
+
+  styleTag.textContent += newStyles; // Append styles instead of replacing
+  svgContent.value = new XMLSerializer().serializeToString(svgDoc);
 };
+
+// Reactive computed property for displaying the modified SVG
+const animatedSVG = computed(() => svgContent.value);
 </script>
 <style scoped>
 
