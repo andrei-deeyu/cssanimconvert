@@ -14,10 +14,14 @@ const handleFileUpload = (event: Event) => {
   if (file && file.type === 'image/svg+xml') {
     const reader = new FileReader();
     reader.onload = () => {
-      emit('file-uploaded', {
-        content: reader.result as string,
-        name: file.name.split('.')[0]
-      });
+      try {
+        emit('file-uploaded', {
+          content: reader.result as string,
+          name: file.name.split('.')[0]
+        });
+      } catch (error) {
+        console.error('Invalid SVG File:', error);
+      }
     };
 
     reader.readAsText(file);
