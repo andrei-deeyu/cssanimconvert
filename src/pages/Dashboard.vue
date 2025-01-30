@@ -58,18 +58,29 @@ const extractAnimationsFromSVG = (svgString: string) => {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(svgString, 'image/svg+xml');
   const styleTags = svgDoc.querySelectorAll('style');
+
   extractedAnimations.value = [];
 
   styleTags.forEach((styleTag) => {
     const cssText = styleTag.textContent || '';
-    const animationRegex = /@keyframes\s+(\w+)\s*{([^}]*)}/g;
-    let match;
+    const lines = cssText.split('\n').map(line => line.trim());
 
-    while ((match = animationRegex.exec(cssText)) !== null) {
-      const name = match[1];
-      const keyframes = match[2].trim().split(/\s*}\s*/).filter(Boolean).map(kf => kf + '}');
-      extractedAnimations.value.push({ name, keyframes });
-    }
+    let currentAnimation: { name: string; keyframes: string[] } | null = null;
+
+    lines.forEach((line) => {
+      if (line.startsWith('@keyframes')) {
+        // Start a new animation block
+        const name = line.split(' ')[1];
+        currentAnimation = { name, keyframes: [] };
+      } else if (currentAnimation && line.endsWith('}')) {
+        // Close the animation block
+        extractedAnimations.value.push(currentAnimation);
+        currentAnimation = null;
+      } else if (currentAnimation) {
+        // Collect keyframe rules
+        currentAnimation.keyframes.push(line);
+      }
+    });
   });
 };
 
