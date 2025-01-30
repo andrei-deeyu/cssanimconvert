@@ -1,17 +1,19 @@
 <template>
-  <div id="structure" class="container bg-light border border-3 border-secondary rounded-start d-flex flex-column justify-content-between">
+  <div
+    id="structure"
+    class="container bg-light border border-3 border-secondary rounded-start d-flex flex-column justify-content-between"
+  >
     <div id="jsonStructure">
       <pre>{{ extractedAnimations }}</pre>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { defineProps } from 'vue'
 
 const props = defineProps<{
-  extractedAnimations: any[];
-}>();
-
+  extractedAnimations: any[]
+}>()
 </script>
 <style scoped>
 #structure {

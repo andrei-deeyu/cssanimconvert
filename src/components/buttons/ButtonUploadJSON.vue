@@ -1,38 +1,41 @@
 <template>
   <div class="input-group mb-3 d-flex flex-column">
     <label class="input-group-text">Upload JSON</label>
-    <input type="file" accept="application/json" class="form-control w-100" @change="handleFileUpload" />
+    <input
+      type="file"
+      accept="application/json"
+      class="form-control w-100"
+      @change="handleFileUpload"
+    />
   </div>
-  </template>
-  <script setup lang="ts">
-  import { defineEmits, defineExpose } from 'vue';
+</template>
+<script setup lang="ts">
+import { defineEmits, defineExpose } from 'vue'
 
-  const emit = defineEmits(['file-uploaded']);
+const emit = defineEmits(['file-uploaded'])
 
-  const handleFileUpload = (event: Event) => {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file && file.type === 'application/json') {
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const jsonData = JSON.parse(reader.result as string);
+const handleFileUpload = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (file && file.type === 'application/json') {
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const jsonData = JSON.parse(reader.result as string)
 
-          emit('file-uploaded', {
-            content: jsonData,
-            name: file.name.split('.')[0]
-          });
-        } catch (error) {
-          console.error('Invalid JSON file:', error);
-        }
-      };
-
-      reader.readAsText(file);
+        emit('file-uploaded', {
+          content: jsonData,
+          name: file.name.split('.')[0],
+        })
+      } catch (error) {
+        console.error('Invalid JSON file:', error)
+      }
     }
-  };
 
-  // Expose the function if the parent needs to trigger it manually
-  defineExpose({ handleFileUpload });
-  </script>
-  <style scoped>
+    reader.readAsText(file)
+  }
+}
 
-  </style>
+// Expose the function if the parent needs to trigger it manually
+defineExpose({ handleFileUpload })
+</script>
+<style scoped></style>
