@@ -8,12 +8,10 @@
       <div v-if="svgContent" v-html="svgContent" class="svg-container"></div>
     </div>
     <div id="JSONContainer">
-      <JSONStructure :extractedAnimations="extractedAnimations" :SVGFilename="svgFilename">
-      </JSONStructure>
+      <JSONStructure :extractedAnimations="extractedAnimations" :SVGFilename="svgFilename" />
       <div id="actions" class="d-flex flex-row justify-content-between gap-3">
-        <ButtonDownloadJSON :extractedAnimations="extractedAnimations" :SVGFilename="svgFilename">
-        </ButtonDownloadJSON>
-        <ButtonUploadJSON @file-uploaded="handleJSONUploaded"> </ButtonUploadJSON>
+        <ButtonDownloadJSON :extractedAnimations="extractedAnimations" :SVGFilename="svgFilename" />
+        <ButtonUploadJSON @file-uploaded="handleJSONUploaded" />
       </div>
     </div>
   </div>
