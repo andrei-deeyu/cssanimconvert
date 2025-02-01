@@ -27,7 +27,7 @@ const handleFileUpload = (event: Event) => {
           name: file.name.split('.')[0],
         })
       } catch (error) {
-        console.error('Invalid JSON file:', error)
+        return alert('Invalid JSON')
       }
     }
 

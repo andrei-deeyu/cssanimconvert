@@ -20,7 +20,7 @@ const handleFileUpload = async (event: Event) => {
         name: file.name.split('.')[0]
       });
     } catch (error) {
-      console.error(error)
+      return alert('Invalid SVG');
     }
   }
 }
