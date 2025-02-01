@@ -5,7 +5,7 @@
   >
     <div id="SVGContainer" class="bg-light p-3 shadow">
       <ButtonUploadSVG @file-uploaded="handleSVGUploaded" />
-      <div v-if="svgContent" v-html="svgContent" class="svg-container"></div>
+      <iframe ref="svgIframe" class="border shadow w-100"></iframe>
     </div>
     <div id="JSONContainer">
       <JSONStructure :extractedAnimations="extractedAnimations" :SVGFilename="svgFilename" />
@@ -17,12 +17,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import ButtonUploadSVG from '../components/buttons/ButtonUploadSVG.vue'
 import JSONStructure from '../components/JSONStructure.vue'
 import ButtonDownloadJSON from '../components/buttons/ButtonDownloadJSON.vue'
 import ButtonUploadJSON from '../components/buttons/ButtonUploadJSON.vue'
 
+const svgIframe = ref<HTMLIFrameElement | null>(null)
 const svgContent = ref<string | null>(null)
 const svgFilename = ref<string | null>(null)
 const extractedAnimations = ref<any[]>([])
@@ -30,11 +31,16 @@ const extractedAnimations = ref<any[]>([])
 const animationData = ref<any[]>([]) // Store JSON animations
 
 // Function triggered when file is uploaded in child component
-const handleSVGUploaded = (svg: { content: string; name: string }) => {
+const handleSVGUploaded = async (svg: { content: string; name: string }) => {
   svgContent.value = svg.content
   svgFilename.value = svg.name
 
   extractAnimationsFromSVG(svg.content)
+
+  await nextTick();
+  if(svgIframe.value) {
+    svgIframe.value.srcdoc = svg.content;
+  }
   // applyAnimationsFromJSON();  -- ?
 }
 
