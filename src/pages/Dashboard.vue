@@ -35,49 +35,17 @@ const handleSVGUploaded = async (svg: { content: string; name: string }) => {
   svgContent.value = svg.content
   svgFilename.value = svg.name
 
-  extractAnimationsFromSVG(svg.content)
-
   await nextTick();
   if(svgIframe.value) {
     svgIframe.value.srcdoc = svg.content;
+    // svgIframe.value.onload = applyAnimationsFromJSON;
   }
-  // applyAnimationsFromJSON();  -- ?
 }
 
 const handleJSONUploaded = (json: { content: any; name: string }) => {
   animationData.value = json.content
 
   applyAnimationsFromJSON()
-}
-
-const extractAnimationsFromSVG = (svgString: string) => {
-  const parser = new DOMParser()
-  const svgDoc = parser.parseFromString(svgString, 'image/svg+xml')
-  const styleTags = svgDoc.querySelectorAll('style')
-
-  extractedAnimations.value = []
-
-  styleTags.forEach((styleTag) => {
-    const cssText = styleTag.textContent || ''
-    const lines = cssText.split('\n').map((line) => line.trim())
-
-    let currentAnimation: { name: string; keyframes: string[] } | null = null
-
-    lines.forEach((line) => {
-      if (line.startsWith('@keyframes')) {
-        // Start a new animation block
-        const name = line.split(' ')[1]
-        currentAnimation = { name, keyframes: [] }
-      } else if (currentAnimation && line.endsWith('}')) {
-        // Close the animation block
-        extractedAnimations.value.push(currentAnimation)
-        currentAnimation = null
-      } else if (currentAnimation) {
-        // Collect keyframe rules
-        currentAnimation.keyframes.push(line)
-      }
-    })
-  })
 }
 
 const applyAnimationsFromJSON = () => {
