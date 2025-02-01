@@ -9,22 +9,19 @@ import { defineEmits, defineExpose } from 'vue'
 
 const emit = defineEmits(['file-uploaded'])
 
-const handleFileUpload = (event: Event) => {
+const handleFileUpload = async (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (file && file.type === 'image/svg+xml') {
-    const reader = new FileReader()
-    reader.onload = () => {
-      try {
-        emit('file-uploaded', {
-          content: reader.result as string,
-          name: file.name.split('.')[0],
-        })
-      } catch (error) {
-        console.error('Invalid SVG File:', error)
-      }
-    }
+    try {
+      const content = await file.text();
 
-    reader.readAsText(file)
+      emit('file-uploaded', {
+        content,
+        name: file.name.split('.')[0]
+      });
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
 
