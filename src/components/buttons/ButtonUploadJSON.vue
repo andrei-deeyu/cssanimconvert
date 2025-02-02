@@ -1,6 +1,6 @@
 <template>
   <div class="input-group mb-3 d-flex flex-column">
-    <label class="input-group-text">Upload JSON</label>
+    <label class="input-group-text bg-white">Upload JSON</label>
     <input
       type="file"
       accept="application/json"

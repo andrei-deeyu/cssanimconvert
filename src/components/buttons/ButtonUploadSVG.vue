@@ -1,6 +1,6 @@
 <template>
   <div class="input-group mb-3">
-    <label class="input-group-text">Upload SVG</label>
+    <label class="input-group-text bg-white">Upload SVG</label>
     <input type="file" accept="image/svg+xml" class="form-control" @change="handleFileUpload" />
   </div>
 </template>
