@@ -7,7 +7,7 @@
 import { defineProps } from 'vue'
 
 const props = defineProps<{
-  extractedAnimations: any[]
+  extractedAnimations: object
   SVGFilename: string | null
 }>()
 

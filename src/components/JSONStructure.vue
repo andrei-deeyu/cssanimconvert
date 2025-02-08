@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="structure"
-    class="container bg-light border border-3 border-secondary rounded-start d-flex flex-column justify-content-between"
-  >
+  <div class="container bg-light border border-3 border-secondary rounded-start d-flex flex-column justify-content-between">
     <div id="jsonStructure">
       <pre>{{ extractedAnimations }}</pre>
     </div>
@@ -12,13 +9,14 @@
 import { defineProps } from 'vue'
 
 const props = defineProps<{
-  extractedAnimations: any[]
+  extractedAnimations: object
 }>()
 </script>
 <style scoped>
-#structure {
+div.container {
   height: 500px;
   min-width: 300px;
   max-width: 500px;
+  overflow-y: scroll;
 }
 </style>

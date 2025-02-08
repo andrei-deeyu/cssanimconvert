@@ -26,7 +26,7 @@ import ButtonUploadJSON from '../components/buttons/ButtonUploadJSON.vue'
 const svgIframe = ref<HTMLIFrameElement | null>(null)
 const svgContent = ref<string | null>(null)
 const svgFilename = ref<string | null>(null)
-const extractedAnimations = ref<any[]>([])
+const extractedAnimations = ref<object>({})
 
 const animationData = ref<any[]>([]) // Store JSON animations
 
