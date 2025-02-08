@@ -14,24 +14,22 @@ import { defineEmits, defineExpose } from 'vue'
 
 const emit = defineEmits(['file-uploaded'])
 
-const handleFileUpload = (event: Event) => {
+const handleFileUpload = async (event: Event) => {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (file && file.type === 'application/json') {
-    const reader = new FileReader()
-    reader.onload = () => {
-      try {
-        const jsonData = JSON.parse(reader.result as string)
+    try {
+      const content = await file.text();
+      const jsonData = JSON.parse(content);
 
-        emit('file-uploaded', {
-          content: jsonData,
-          name: file.name.split('.')[0],
-        })
-      } catch (error) {
-        return alert('Invalid JSON')
-      }
+      emit('file-uploaded', {
+        content: jsonData,
+        name: file.name.split('.')[0],
+      });
+    } catch (error) {
+      alert('Invalid JSON format')
     }
-
-    reader.readAsText(file)
+  } else {
+    alert('Invalid JSON File')
   }
 }
 
