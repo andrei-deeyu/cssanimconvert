@@ -26,30 +26,55 @@ import ButtonUploadJSON from '../components/buttons/ButtonUploadJSON.vue'
 const svgIframe = ref<HTMLIFrameElement | null>(null)
 const svgContent = ref<string | null>(null)
 const svgFilename = ref<string | null>(null)
-const extractedAnimations = ref<object>({})
 
-const animationData = ref<any[]>([]) // Store JSON animations
+const animations = ref<any[]>([])
+const extractedAnimations = ref<object>({})
 
 // Function triggered when file is uploaded in child component
 const handleSVGUploaded = async (svg: { content: string; name: string }) => {
   svgContent.value = svg.content
   svgFilename.value = svg.name
 
-  await nextTick();
-  if(svgIframe.value) {
-    svgIframe.value.srcdoc = svg.content;
-    // svgIframe.value.onload = applyAnimationsFromJSON;
-  }
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svg.content, 'image/svg+xml');
+
+  const nodeElements = doc.querySelectorAll('*');
+  let svgNode: Element | null = null;
+  let styleNode: Element | null = null;
+  let elsNode: Array<Element> = [];
+
+  nodeElements.forEach(el => {
+    if(el.tagName == 'svg') {
+      svgNode = el
+    } else if (el.tagName == 'style') {
+      styleNode = el;
+    } else {
+      elsNode.push(el);
+    }
+  })
+
+  if(!svgIframe.value) return;
+  const iframeDoc = svgIframe.value.contentWindow?.document;
+
+  if(!iframeDoc || !svgNode || !styleNode) return;
+
+  // apply stylings from the SVG?
+  iframeDoc.body.appendChild(svgNode);
+  elsNode.forEach(el => {
+    iframeDoc.body.getElementsByTagName('svg')[0].appendChild(el);
+  })
 }
 
+
 const handleJSONUploaded = (json: { content: any; name: string }) => {
-  animationData.value = json.content
+  animations.value = json.content
 
   applyAnimationsFromJSON()
 }
 
 const applyAnimationsFromJSON = () => {
-  if (!svgContent.value || animationData.value.length === 0) return
+  if (!svgContent.value || animations.value.length === 0) return
 
   const parser = new DOMParser()
   const svgDoc = parser.parseFromString(svgContent.value, 'image/svg+xml')
@@ -60,7 +85,7 @@ const applyAnimationsFromJSON = () => {
     svgDoc.documentElement.appendChild(styleTag)
   }
 
-  const newStyles = animationData.value
+  const newStyles = animations.value
     .map(({ name, keyframes }) => `@keyframes ${name} { ${keyframes.join(' ')} }`)
     .join('\n')
 
