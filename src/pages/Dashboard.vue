@@ -39,31 +39,42 @@ const handleSVGUploaded = async (svg: { content: string; name: string }) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(svg.content, 'image/svg+xml');
 
-  const nodeElements = doc.querySelectorAll('*');
-  let svgNode: Element | null = null;
-  let styleNode: Element | null = null;
-  let elsNode: Array<Element> = [];
+  const root = doc.documentElement;
 
-  nodeElements.forEach(el => {
-    if(el.tagName == 'svg') {
-      svgNode = el
-    } else if (el.tagName == 'style') {
-      styleNode = el;
-    } else {
-      elsNode.push(el);
-    }
-  })
+  const iframeDoc = svgIframe.value?.contentDocument//.contentWindow?.document;
 
-  if(!svgIframe.value) return;
-  const iframeDoc = svgIframe.value.contentWindow?.document;
+  // Clear the iframe before adding content
+  // iframeDoc.body.innerHTML = '';
 
-  if(!iframeDoc || !svgNode || !styleNode) return;
+  const newSVGContainer = buildTree(root);
 
-  // apply stylings from the SVG?
-  iframeDoc.body.appendChild(svgNode);
-  elsNode.forEach(el => {
-    iframeDoc.body.getElementsByTagName('svg')[0].appendChild(el);
-  })
+  iframeDoc?.body.appendChild(newSVGContainer);
+
+}
+
+
+
+function buildTree(node: Element): Element {
+  // Clone the node to preserve attributes
+  const newNode = document.createElementNS('http://www.w3.org/2000/svg', node.tagName);
+
+  // Copy attributes
+  for (let i = 0; i < node.attributes.length; i++) {
+    const attr = node.attributes[i];
+    newNode.setAttribute(attr.name, attr.value);
+  }
+
+  // If the node contains text (like in <style>), copy it
+  if (node.tagName === 'style' || node.childNodes.length === 1 && node.firstChild?.nodeType === Node.TEXT_NODE) {
+    newNode.textContent = node.textContent;
+  }
+
+  // Recursively build and append child nodes
+  Array.from(node.children).forEach((child) => {
+    newNode.appendChild(buildTree(child));
+  });
+
+  return newNode;
 }
 
 
